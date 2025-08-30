@@ -63,6 +63,8 @@ class FitnessTracker {
             renderBadges();
         } else if (tabName === 'achievements') {
             renderAchievements();
+        } else if (tabName === 'planner') {
+            renderWeeklyPlan();
         }
         
         // Update URL without page reload
