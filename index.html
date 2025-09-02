@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitTracker - Your Daily Fitness Game</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Simple Fitness Tracker</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <div class="header-content">
-            <h1>🎮 FitTracker</h1>
+            <h1>💪 Fitness Tracker</h1>
             <nav>
                 <button class="tab-btn active" data-tab="today">Today</button>
-                <button class="tab-btn" data-tab="planner">History</button>
-                <button class="tab-btn" data-tab="progress">Progress</button>
-                <button class="tab-btn" data-tab="badges">Badges</button>
-                <button class="tab-btn" data-tab="achievements">Achievements</button>
-                <button class="tab-btn" data-tab="settings">Settings</button>
+                <button class="tab-btn" data-tab="weekly">Weekly</button>
+                <button class="tab-btn" data-tab="monthly">Monthly</button>
+                <button class="tab-btn" data-tab="account">Account</button>
             </nav>
             <div class="header-controls">
-                <button id="sound-toggle" class="icon-btn" title="Toggle Sound">🔇</button>
                 <button id="theme-toggle" class="icon-btn" title="Toggle Dark Mode">🌙</button>
             </div>
         </div>
@@ -33,30 +30,16 @@
         <section id="today-tab" class="tab-content active">
             <div class="user-info">
                 <div class="date-info">📅 <span id="current-date"></span></div>
-                <div class="level-badge">Level <span id="user-level">1</span></div>
-                <div class="xp-info"><span id="user-xp">0</span> XP</div>
                 <div class="streak-info">🔥 <span id="streak-count">0</span> day streak</div>
+                <div class="goal-info">🎯 <span id="completed-today">0</span>/3 completed</div>
             </div>
 
-            <div class="missions-section">
-                <h2>Today's Missions</h2>
-                <div id="daily-missions" class="missions-grid"></div>
-            </div>
-
-            <div class="stretches-section">
-                <h2>Today's Stretches</h2>
-                <div id="daily-stretches" class="stretches-grid"></div>
-            </div>
-
-            <div class="quote-section">
-                <p id="inspiring-quote" class="inspiring-quote"></p>
-            </div>
-
+            <div id="exercises-container"></div>
         </section>
 
-        <!-- Planner Tab -->
-        <section id="planner-tab" class="tab-content">
-            <h2>Weekly Activity History</h2>
+        <!-- Weekly Tab -->
+        <section id="weekly-tab" class="tab-content">
+            <h2>Weekly Activity</h2>
             <div class="week-controls">
                 <button id="prev-week">⬅️ Previous Week</button>
                 <div class="week-selector">
@@ -64,146 +47,75 @@
                 </div>
                 <button id="next-week">➡️ Next Week</button>
             </div>
-            <div id="weekly-plan" class="weekly-grid"></div>
+            <div id="history-grid" class="history-grid"></div>
         </section>
 
-        <!-- Progress Tab -->
-        <section id="progress-tab" class="tab-content">
-            <h2>Your Progress</h2>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>This Week</h3>
-                    <div class="stat-value"><span id="week-total-minutes">0</span> min</div>
+        <!-- Monthly Tab -->
+        <section id="monthly-tab" class="tab-content">
+            <h2>Monthly Goal Progress</h2>
+            <div class="month-controls">
+                <button id="prev-month">⬅️ Previous Month</button>
+                <div class="month-selector">
+                    <span id="current-month-label">This Month</span>
                 </div>
-                <div class="stat-card">
-                    <h3>Missions Done</h3>
-                    <div class="stat-value"><span id="missions-completed">0</span></div>
-                </div>
-                <div class="stat-card">
-                    <h3>Current Level</h3>
-                    <div class="stat-value"><span id="current-level">1</span></div>
-                </div>
+                <button id="next-month">➡️ Next Month</button>
             </div>
-
-            <div class="charts-section">
-                <div class="chart-container">
-                    <h3>Weekly Minutes</h3>
-                    <canvas id="weekly-chart" width="300" height="200"></canvas>
+            <div id="monthly-chart" class="monthly-chart"></div>
+            <div class="chart-legend">
+                <div class="legend-item">
+                    <div class="legend-dot completed"></div>
+                    <span>3+ exercises completed</span>
                 </div>
-                <div class="chart-container">
-                    <h3>4-Week Streak</h3>
-                    <canvas id="streak-chart" width="300" height="200"></canvas>
+                <div class="legend-item">
+                    <div class="legend-dot partial"></div>
+                    <span>1-2 exercises completed</span>
                 </div>
-            </div>
-
-            <div class="heatmap-section">
-                <h3>Monthly Activity</h3>
-                <div id="activity-heatmap" class="heatmap"></div>
-            </div>
-
-        </section>
-
-        <!-- Badges Tab -->
-        <section id="badges-tab" class="tab-content">
-            <h2>🏆 Badge Collection</h2>
-            <p class="tab-description">One-time achievements that mark special milestones in your fitness journey!</p>
-            
-            <div class="badges-stats">
-                <div class="stat-card">
-                    <h3>Badges Earned</h3>
-                    <div class="stat-value"><span id="badges-earned-count">0</span></div>
+                <div class="legend-item">
+                    <div class="legend-dot empty"></div>
+                    <span>No exercises</span>
                 </div>
-                <div class="stat-card">
-                    <h3>Total Badges</h3>
-                    <div class="stat-value"><span id="badges-total-count">0</span></div>
-                </div>
-                <div class="stat-card">
-                    <h3>Completion</h3>
-                    <div class="stat-value"><span id="badges-completion">0%</span></div>
-                </div>
-            </div>
-
-            <div class="badges-section">
-                <div id="badges-container" class="badges-grid"></div>
             </div>
         </section>
 
-        <!-- Achievements Tab -->
-        <section id="achievements-tab" class="tab-content">
-            <h2>⭐ Achievement Progression</h2>
-            <p class="tab-description">Multi-level achievements that grow with your dedication and consistency!</p>
+        <!-- Account Tab -->
+        <section id="account-tab" class="tab-content">
+            <h2>Account Statistics</h2>
             
-
-
-            <div class="achievements-section">
-                <div id="achievements-container" class="achievements-grid"></div>
-            </div>
-        </section>
-
-        <!-- Settings Tab -->
-        <section id="settings-tab" class="tab-content">
-            <h2>Settings</h2>
-            
-            <div class="settings-section">
-                <h3>Profile</h3>
-                <div class="form-group">
-                    <label for="user-age">Age</label>
-                    <input type="number" id="user-age" min="13" max="120">
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-exercises">0</div>
+                    <div class="stat-label">Total Exercises</div>
                 </div>
-                <div class="form-group">
-                    <label for="user-height">Height (inches)</label>
-                    <input type="number" id="user-height" min="36" max="96">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-days">0</div>
+                    <div class="stat-label">Days Active</div>
                 </div>
-                <div class="form-group">
-                    <label for="user-weight">Weight (lbs)</label>
-                    <input type="number" id="user-weight" min="50" max="500">
+                <div class="stat-card">
+                    <div class="stat-number" id="current-streak-display">0</div>
+                    <div class="stat-label">Current Streak</div>
                 </div>
-                <div class="form-group">
-                    <label for="user-equipment">Equipment (comma separated)</label>
-                    <input type="text" id="user-equipment" placeholder="resistance bands, treadmill">
+                <div class="stat-card">
+                    <div class="stat-number" id="longest-streak">0</div>
+                    <div class="stat-label">Longest Streak</div>
                 </div>
             </div>
 
-            <div class="settings-section">
-                <h3>Preferences</h3>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="sound-enabled"> Enable sound effects
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="dark-mode"> Dark mode
-                    </label>
-                </div>
+            <div class="account-section">
+                <h3>Top Exercises</h3>
+                <div id="top-exercises" class="top-exercises-list"></div>
             </div>
 
-            <div class="settings-section">
-                <h3>Data Management</h3>
-                <div class="data-controls">
-                    <button id="export-data">📥 Export Data</button>
-                    <div class="import-group">
-                        <input type="file" id="import-file" accept=".json" style="display: none;">
-                        <button id="import-data">📤 Import Data</button>
-                    </div>
-                    <button id="reset-app" class="danger">⚠️ Reset App</button>
-                </div>
+            <div class="account-section">
+                <h3>Activity by Category</h3>
+                <div id="category-breakdown" class="category-breakdown"></div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <p>FitTracker v1.0 - Made for daily 15–30 min habits 💪</p>
-    </footer>
-
-    <!-- Load scripts in dependency order -->
-    <script src="js/data.js?v=999999999999999999"></script>
-    <script src="js/storage.js?v=999999999999999999"></script>
-    <script src="js/sound.js?v=999999999999999999"></script>
-
-    <script src="js/stats.js?v=999999999999999999"></script>
-    <script src="js/ui.js?v=999999999999999999"></script>
-    <script src="js/app.js?v=999999999999999999"></script>
+    <!-- Load scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
