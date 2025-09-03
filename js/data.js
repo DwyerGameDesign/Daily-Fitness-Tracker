@@ -1,3 +1,96 @@
+// Weekly plan data with daily recommendations
+const weeklyPlan = {
+    day1: {
+        focus: "Core & Cardio",
+        exercises: [
+            "core-plank-basic", "core-mountain-climbers", "core-russian-twists", 
+            "core-bicycle-crunches", "cardio-jumping-jacks", "cardio-burpees", 
+            "cardio-step-ups", "core-dead-bug", "core-side-plank", "core-hollow-hold"
+        ],
+        messages: [
+            "A strong core supports your spine and improves posture.",
+            "Core stability reduces risk of back pain as you age.",
+            "Cardio boosts heart health and daily energy levels."
+        ]
+    },
+    day2: {
+        focus: "Legs & Glutes",
+        exercises: [
+            "legs-bodyweight-squats", "legs-lunges", "legs-glute-bridges", 
+            "legs-wall-sit", "legs-calf-raises", "legs-band-sidesteps", 
+            "legs-reverse-lunges", "legs-single-leg-glute-bridges", "legs-sumo-squats"
+        ],
+        messages: [
+            "Strong legs make everyday activities easier — from climbing stairs to playing with your kids.",
+            "Working glutes protects your lower back and improves hip stability.",
+            "Building leg strength increases overall calorie burn."
+        ]
+    },
+    day3: {
+        focus: "Arms & Chest",
+        exercises: [
+            "arms-pushups", "arms-diamond-pushups", "arms-chair-dips", 
+            "arms-band-curls", "arms-band-press", "arms-band-rows", 
+            "arms-band-overhead-triceps", "arms-pike-pushups"
+        ],
+        messages: [
+            "Upper body strength improves posture and reduces shoulder strain.",
+            "Stronger arms and chest make pushing, pulling, and lifting in daily life easier.",
+            "Muscle mass helps maintain a healthy metabolism as you age."
+        ]
+    },
+    day4: {
+        focus: "Balance & Recovery",
+        exercises: [
+            "balance-single-leg", "balance-bird-dogs", "balance-yoga-tree", 
+            "cardio-walk-brisk", "balance-yoga-warrior3", "balance-leg-swings", 
+            "balance-standing-figure-4"
+        ],
+        messages: [
+            "Balance training reduces risk of falls and injuries.",
+            "Recovery days give your muscles time to rebuild and grow stronger.",
+            "Mind-body movements improve focus and reduce stress."
+        ]
+    },
+    day5: {
+        focus: "Full Body Mix",
+        exercises: [
+            "cardio-burpees", "cardio-step-ups", "arms-pike-pushups", 
+            "core-side-plank", "legs-sumo-squats", "arms-pushups", 
+            "legs-lunges", "core-russian-twists"
+        ],
+        messages: [
+            "Full-body workouts build balanced strength and endurance.",
+            "Mixing exercises keeps your routine fun and effective.",
+            "Variety challenges your body and prevents plateaus."
+        ]
+    },
+    day6: {
+        focus: "Lower Body Strength",
+        exercises: [
+            "legs-reverse-lunges", "legs-single-leg-glute-bridges", "legs-sumo-squats", 
+            "legs-band-sidesteps", "legs-wall-sit", "legs-glute-bridges", "legs-bodyweight-squats"
+        ],
+        messages: [
+            "Lower body strength powers athletic movements like running and jumping.",
+            "Strong hips and legs protect your knees and back.",
+            "Leg training improves balance and everyday mobility."
+        ]
+    },
+    day7: {
+        focus: "Active Recovery & Mobility",
+        exercises: [
+            "balance-standing-figure-4", "balance-yoga-warrior3", "core-hollow-hold", 
+            "core-bicycle-crunches", "cardio-walk-brisk", "balance-yoga-tree", "balance-single-leg"
+        ],
+        messages: [
+            "Mobility keeps your joints healthy and pain-free.",
+            "Active recovery reduces soreness and speeds up progress.",
+            "Flexibility training improves posture and movement quality."
+        ]
+    }
+};
+
 // Exercise library - simplified from the original missions
 const exerciseLibrary = [
     // Core & Cardio
@@ -213,5 +306,38 @@ const exerciseLibrary = [
     }
 ];
 
-// Make exercise library available globally
+// Get daily recommendations based on day of week
+function getDailyRecommendations() {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    
+    // Map JavaScript day (0-6) to our plan days (1-7)
+    const planDay = dayOfWeek === 0 ? 7 : dayOfWeek; // Sunday becomes day 7
+    const dayKey = `day${planDay}`;
+    
+    const dayPlan = weeklyPlan[dayKey];
+    if (!dayPlan) return { exercises: [], message: "", focus: "" };
+    
+    // Select 5 random exercises from the day's list
+    const shuffled = [...dayPlan.exercises].sort(() => 0.5 - Math.random());
+    const selectedExerciseIds = shuffled.slice(0, 5);
+    
+    // Get full exercise objects
+    const recommendedExercises = selectedExerciseIds.map(id => 
+        exerciseLibrary.find(ex => ex.id === id)
+    ).filter(Boolean);
+    
+    // Select random inspirational message
+    const randomMessage = dayPlan.messages[Math.floor(Math.random() * dayPlan.messages.length)];
+    
+    return {
+        exercises: recommendedExercises,
+        message: randomMessage,
+        focus: dayPlan.focus
+    };
+}
+
+// Make functions available globally
 window.exerciseLibrary = exerciseLibrary;
+window.weeklyPlan = weeklyPlan;
+window.getDailyRecommendations = getDailyRecommendations;
