@@ -15,6 +15,82 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
+// Render daily recommendations
+function renderDailyRecommendations() {
+    const recommendations = getDailyRecommendations();
+    const todayHistory = getTodayHistory();
+    const completedIds = todayHistory.map(entry => entry.exerciseId);
+    
+    // Update focus and inspiration message
+    document.getElementById('daily-focus-text').textContent = recommendations.focus;
+    document.getElementById('inspiration-message').textContent = recommendations.message;
+    
+    // Render recommended exercises
+    const container = document.getElementById('recommended-exercises');
+    container.innerHTML = '';
+    
+    recommendations.exercises.forEach(exercise => {
+        const isCompleted = completedIds.includes(exercise.id);
+        const exerciseCard = createRecommendedExerciseCard(exercise, isCompleted);
+        container.appendChild(exerciseCard);
+    });
+}
+
+// Create recommended exercise card
+function createRecommendedExerciseCard(exercise, isCompleted) {
+    const card = document.createElement('div');
+    card.className = `recommended-exercise ${isCompleted ? 'completed' : ''}`;
+    
+    const icon = isCompleted ? '✅' : '⭐';
+    
+    card.innerHTML = `
+        <div class="recommended-icon">${icon}</div>
+        <div class="recommended-exercise-info">
+            <div class="recommended-exercise-name">${exercise.name}</div>
+            <div class="recommended-exercise-details">${exercise.description}</div>
+        </div>
+        <input type="checkbox" class="recommended-exercise-checkbox" 
+               data-exercise-id="${exercise.id}" 
+               data-exercise-name="${exercise.name}"
+               ${isCompleted ? 'checked' : ''}>
+    `;
+    
+    const checkbox = card.querySelector('.recommended-exercise-checkbox');
+    checkbox.addEventListener('change', (event) => {
+        handleRecommendedExerciseToggle(event, card);
+    });
+    
+    return card;
+}
+
+// Handle recommended exercise completion toggle
+function handleRecommendedExerciseToggle(event, card) {
+    const checkbox = event.target;
+    const exerciseId = checkbox.dataset.exerciseId;
+    const exerciseName = checkbox.dataset.exerciseName;
+    const icon = card.querySelector('.recommended-icon');
+    
+    if (checkbox.checked) {
+        if (addExerciseToHistory(exerciseId, exerciseName)) {
+            card.classList.add('completed');
+            icon.textContent = '✅';
+            showToast(`${exerciseName} completed! 💪`);
+            updateUserInfo();
+            // Also update the main exercises list to reflect completion
+            renderExercises();
+        }
+    } else {
+        if (removeExerciseFromHistory(exerciseId)) {
+            card.classList.remove('completed');
+            icon.textContent = '⭐';
+            showToast(`${exerciseName} unchecked`);
+            updateUserInfo();
+            // Also update the main exercises list to reflect change
+            renderExercises();
+        }
+    }
+}
+
 // Update user info display
 function updateUserInfo() {
     // Update date display
@@ -121,12 +197,16 @@ function handleExerciseToggle(event) {
             card.classList.add('completed');
             showToast(`${exerciseName} completed! 💪`);
             updateUserInfo();
+            // Also update the recommended exercises if this exercise is in today's recommendations
+            renderDailyRecommendations();
         }
     } else {
         if (removeExerciseFromHistory(exerciseId)) {
             card.classList.remove('completed');
             showToast(`${exerciseName} unchecked`);
             updateUserInfo();
+            // Also update the recommended exercises if this exercise is in today's recommendations
+            renderDailyRecommendations();
         }
     }
 }
@@ -462,6 +542,7 @@ function updateThemeToggleButton(isDark) {
 // Initialize UI
 function initializeUI() {
     updateUserInfo();
+    renderDailyRecommendations();
     renderExercises();
     setupTabs();
     setupWeekNavigation();
@@ -474,6 +555,7 @@ function initializeUI() {
 // Make functions available globally
 window.showToast = showToast;
 window.updateUserInfo = updateUserInfo;
+window.renderDailyRecommendations = renderDailyRecommendations;
 window.renderExercises = renderExercises;
 window.renderHistory = renderHistory;
 window.renderAccountStats = renderAccountStats;
