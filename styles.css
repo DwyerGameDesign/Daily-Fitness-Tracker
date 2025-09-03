@@ -180,6 +180,110 @@ main {
     border-color: var(--primary-color);
 }
 
+/* Daily recommendations styles */
+.daily-recommendations {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--primary-color);
+}
+
+.recommendations-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.daily-focus {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.daily-focus span {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.inspiration-message {
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(90, 163, 240, 0.05));
+    border: 1px solid rgba(74, 144, 226, 0.2);
+    border-radius: var(--radius-small);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.recommended-exercises {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.recommended-exercise {
+    padding: 1rem;
+    background: var(--background);
+    border: 2px solid var(--primary-color);
+    border-radius: var(--radius-small);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.recommended-exercise:hover {
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+    transform: translateY(-1px);
+}
+
+.recommended-exercise.completed {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+    border-color: var(--success-color);
+}
+
+.recommended-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    min-width: 2rem;
+    text-align: center;
+}
+
+.recommended-exercise.completed .recommended-icon {
+    color: var(--success-color);
+}
+
+.recommended-exercise-info {
+    flex: 1;
+}
+
+.recommended-exercise-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.recommended-exercise-details {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.recommended-exercise-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--success-color);
+    cursor: pointer;
+}
+
 /* Categories */
 .category-section {
     margin-bottom: 2rem;
@@ -685,6 +789,28 @@ button:disabled {
         position: absolute;
         right: 1rem;
         top: 1rem;
+    }
+
+    /* Mobile daily recommendations adjustments */
+    .recommended-exercises {
+        grid-template-columns: 1fr;
+    }
+    
+    .recommended-exercise {
+        padding: 0.75rem;
+        gap: 0.5rem;
+    }
+    
+    .recommended-icon {
+        font-size: 1.25rem;
+    }
+    
+    .recommended-exercise-name {
+        font-size: 0.9rem;
+    }
+    
+    .recommended-exercise-details {
+        font-size: 0.8rem;
     }
 
     .exercises-grid {
